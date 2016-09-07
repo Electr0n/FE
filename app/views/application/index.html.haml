@@ -1,0 +1,32 @@
+%h1 Hello
+/= form_tag application_index_path, :method => 'get' do
+/  %p
+/    = text_field_tag :name, params[:name], placeholder: " Name"
+/    = submit_tag "Search", :name => nil
+
+= form_tag application_index_path do
+  %fieldset
+    %legend Basic details
+    = text_field :school,:size=>"45",:class=>"round",:id=>"school"
+    %br/
+    = submit_tag "save and continue", class: "savebutton"
+:javascript
+  $(".savebutton").click(function() {
+    alert('1'); 
+    $('form').submit(function() {
+        alert('2');  
+        var valuesToSubmit = $(this).serialize();
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:4567/bye",
+            data: valuesToSubmit.to_json,
+            dataType: "JSON"
+        }).success(function(json){
+            console.log("success", json);
+        });
+        alert(valuesToSubmit);
+        alert('4');
+        return false;
+        alert('5');
+    });
+  }); 

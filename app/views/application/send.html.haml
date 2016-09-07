@@ -1,0 +1,7 @@
+%h1 Send form
+= form_for @some_obj do |s|
+  .form-group
+    = s.label :data, class: "col-sm-1 control-label"
+    .col-sm-5
+      = s.text_field :data, autofocus: true, class: 'form-control'
+  = s.submit "Save", class: "btn btn-confirm"
