@@ -1,32 +1,73 @@
 %h1 Hello
-/= form_tag application_index_path, :method => 'get' do
-/  %p
-/    = text_field_tag :name, params[:name], placeholder: " Name"
-/    = submit_tag "Search", :name => nil
+
+/ = form_tag application_index_path do
+/   %fieldset
+/     %legend Basic details
+/     = text_field_tag :school
+/     %br/
+/     = submit_tag "save and continue", class: "savebutton"
+/ :javascript
+/   $(".savebutton").click(function() {
+/     alert('2');  
+/     var valuesToSubmit = $(this).toString();
+/     alert(valuesToSubmit);
+/     var formData = {"name": valuesToSubmit};
+/     $.ajax({
+/         type: "POST",
+/         url: "http://localhost:4567/bye",
+/         data: JSON.stringify(formData),
+/         dataType: "JSON"
+/     }).success(function(json){
+/         console.log("success", json);
+/     });
+/     alert(valuesToSubmit);
+/     return false;
+/     alert('5');
+/   }); 
+
+/ = form_tag application_index_path do
+/   %fieldset
+/     %legend Basic details
+/     = text_field_tag :school
+/     %br/
+/     %input{:onclick => "send(this.form)", :type => "button", :value => "Send"}
+/ :javascript
+/   function send(form) {
+/     alert("Yeah");
+/     elems = form.elements;
+/     alert(elems);
+/     $.ajax({
+/         type: "POST",
+/         url: "http://localhost:4567/bye",
+/         data: JSON.stringify(elems),
+/         dataType: "JSON"
+/     }).success(function(json){
+/         console.log("success", json);
+/     });
+/     alert(valuesToSubmit);
+/     return false;
+/     alert('5');
+/   };
 
 = form_tag application_index_path do
   %fieldset
     %legend Basic details
-    = text_field :school,:size=>"45",:class=>"round",:id=>"school"
+    = text_field_tag :school
     %br/
-    = submit_tag "save and continue", class: "savebutton"
+    %input{:onclick => "send(this.form)", :type => "button", :value => "Send"}
+
 :javascript
-  $(".savebutton").click(function() {
-    alert('1'); 
-    $('form').submit(function() {
-        alert('2');  
-        var valuesToSubmit = $(this).serialize();
-        $.ajax({
-            type: "POST",
-            url: "http://localhost:4567/bye",
-            data: valuesToSubmit.to_json,
-            dataType: "JSON"
-        }).success(function(json){
-            console.log("success", json);
-        });
-        alert(valuesToSubmit);
-        alert('4');
-        return false;
-        alert('5');
+  function send(form) {
+    elems = $(form.elements).serializeArray();
+    var f = {};
+    $.each(elems, function (i, field) { f[field.name] = field.value || ""; });
+    $.ajax({
+        type: "POST",
+        url: "http://localhost:4567/bye",
+        data: JSON.stringify(f),
+        dataType: "JSON"
+    }).success(function(json){
+        console.log("success", json);
     });
-  }); 
+    return false;
+  };

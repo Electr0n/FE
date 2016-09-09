@@ -18,5 +18,7 @@ end
 
 post '/bye' do
 	"Bye"
-	a = JSON.parse(request.env).to_json
+	# a = JSON.parse(request.env).to_json
+	a = JSON.parse(request.env["rack.input"].read)
+	puts a
 end
